@@ -1,18 +1,17 @@
 package org.dxworks.voyagerrelease.config
 
 import org.dxworks.voyagerrelease.utils.fieldMissingOrNull
-import org.dxworks.voyagerrelease.utils.latest
 import org.dxworks.voyagerrelease.utils.logger
 import kotlin.system.exitProcess
 
-class InstrumentEnvConfig(
+class Voyenv(
     name: String? = null,
-    tag: String? = null,
-    val token: String? = null
+    voyager_version: String? = null,
+    instruments: List<InstrumentEnvConfig>? = null
 ) {
     companion object {
-        private val log = logger<InstrumentEnvConfig>()
-        private const val source = "instrument environment config"
+        private val log = logger<Voyenv>()
+        private const val source = "voyager release"
     }
 
     val name = name ?: kotlin.run {
@@ -20,5 +19,7 @@ class InstrumentEnvConfig(
         exitProcess(1)
     }
 
-    val version = tag ?: latest
+    val voyagerVersion = voyager_version!!
+
+    val instruments: List<InstrumentEnvConfig> = instruments ?: emptyList()
 }
