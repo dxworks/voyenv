@@ -2,10 +2,12 @@ package org.dxworks.voyagerrelease
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.dxworks.voyagerrelease.config.Voyenv
+import org.dxworks.voyagerrelease.instruments.InstrumentsManager
 import org.dxworks.voyagerrelease.utils.defaultReleaseFileName
 import org.dxworks.voyagerrelease.utils.yamlMapper
 import org.dxworks.voyagerrelease.voyager.VoyagerService
 import java.nio.file.Path
+import kotlin.concurrent.thread
 
 fun main(args: Array<String>) {
     val voyenv: Voyenv = yamlMapper.readValue(
@@ -17,11 +19,11 @@ fun main(args: Array<String>) {
             }
         ).toFile()
     )
-    println(voyenv.instruments.joinToString { "${it.name} : ${it.version}" })
 
-    println("Downloading voyager version " + voyenv.voyagerVersion)
+    println("Setting up release ${voyenv.name}")
 
     val releaseDir = Path.of(voyenv.name).toFile().apply { mkdirs() }
 
     VoyagerService().downloadVoyager(voyenv.voyagerVersion, releaseDir)
+    InstrumentsManager(releaseDir).apply { voyenv.instruments.forEach { thread { downloadInstrument(it) } } }
 }

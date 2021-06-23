@@ -1,13 +1,13 @@
 package org.dxworks.voyagerrelease.config
 
 import org.dxworks.voyagerrelease.utils.fieldMissingOrNull
-import org.dxworks.voyagerrelease.utils.latest
 import org.dxworks.voyagerrelease.utils.logger
 import kotlin.system.exitProcess
 
 class InstrumentEnvConfig(
     name: String? = null,
     tag: String? = null,
+    val asset: String? = null,
     val token: String? = null
 ) {
     companion object {
@@ -20,5 +20,8 @@ class InstrumentEnvConfig(
         exitProcess(1)
     }
 
-    val version = tag ?: latest
+    val tag = tag ?: kotlin.run {
+        log.error(fieldMissingOrNull("tag", source))
+        exitProcess(1)
+    }
 }

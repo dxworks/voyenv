@@ -4,22 +4,23 @@ import org.dxworks.githubminer.service.repository.releases.GithubReleasesService
 import org.dxworks.voyagerrelease.commandInterpreterName
 import org.dxworks.voyagerrelease.interpreterArg
 import org.dxworks.voyagerrelease.isWindows
-import org.dxworks.voyagerrelease.utils.Unzip
-import org.dxworks.voyagerrelease.utils.dxworks
-import org.dxworks.voyagerrelease.utils.voyager
-import org.dxworks.voyagerrelease.utils.voyagerAssetName
+import org.dxworks.voyagerrelease.utils.*
 import java.io.File
-import java.util.zip.ZipInputStream
 
 class VoyagerService {
+
+    companion object {
+        private val log = logger<VoyagerService>()
+    }
 
     private val githubReleasesService = GithubReleasesService(dxworks, voyager)
 
     fun downloadVoyager(tag: String, location: File) {
-        githubReleasesService.downloadReleaseAsset(tag, voyagerAssetName)
-            .also { Unzip().extract(ZipInputStream(it), location) }
+        log.info("Downloading voyager@$tag")
+        githubReleasesService.downloadReleaseAsset(tag, voyagerAssetName).unzipTo(location)
         unpackVoyagerDir(location)
         makeScriptExecutable(location)
+        log.info("Done setting up voyager@$tag")
     }
 
     private fun unpackVoyagerDir(location: File) {
