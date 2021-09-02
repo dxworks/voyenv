@@ -23,8 +23,8 @@
 hs_err_pid*
 
 .idea
+*.iml
 .mvn
-voyager-release.yml
 
 # test directories for release
 /voyager-*

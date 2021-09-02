@@ -1,0 +1,63 @@
+## The name of the Environment / Release you want to create
+#name: voyager-test
+#
+## The voyager version you want to use
+#voyager_version: v1.3.0
+#
+## The instruments you want in your environment
+#instruments:
+#  # For Github repos
+#  - name: dxworks/jafax
+#    tag: v0.3.1-voyager # also possible to write 1.2.5 but the tag will automatically be converted to v{semver}-voyager?
+#    asset: jafax.zip # optional, if not specified, the source code of the specified tag is downloaded
+#  - name: dxworks/honeydew
+#    tag: v0.1.2-voyager # also possible to write 1.2.5 but the tag will automatically be converted to v{semver}-voyager?
+#    asset: honeydew.zip # optional, if not specified, the source code of the specified tag is downloaded
+#
+#
+## The Runtimes you want available in your environment
+#runtimes:
+#  # get java versions from https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/tag/jdk-11.0.11%2B9_openj9-0.26.0 or api from https://api.adoptopenjdk.net/q/swagger-ui/#/Assets/searchReleases
+#  java:
+#    version: 11
+#    platform: mac
+#    arch: x64
+
+
+name: voyager-test-1
+voyager_version: v1.4.1
+instruments:
+  - name: dxworks/voyager-git-log-instrument
+    tag: v1.0.0
+    asset: git-log.zip
+  - name: dxworks/lizard
+#    tag: v1.17.9-voyager
+  - name: dxworks/metrixplusplus
+#    tag: v1.7.1-voyager
+  - name: dxworks/inspector-git
+    asset: iglog.zip
+  - name: dxworks/dude
+    asset: dude-voyager.zip
+  - name: dxworks/insider
+    asset: insider-voyager.zip
+  - name: dxworks/honeydew
+    asset: honeydew.zip
+  - name: dxworks/jafax
+    asset: jafax.zip
+  - name: dxworks/maven-miner
+    asset: maven-miner-voyager.zip
+  - name: dxworks/npm-miner
+    asset: npm-miner-voyager.zip
+
+tokens:
+  - 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
+
+runtimes:
+  java:
+    version: 11
+    platform: mac
+    arch: x64
+  python:
+    version: 3.9.4
+    platform: mac
+    arch: x86_64
