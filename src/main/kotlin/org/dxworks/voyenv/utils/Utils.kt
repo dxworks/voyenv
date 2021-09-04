@@ -11,9 +11,15 @@ import org.dxworks.voyenv.isWindows
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.util.*
 
 inline fun <reified T : Any> logger(): Logger = LoggerFactory.getLogger(T::class.java)
-val yamlMapper = ObjectMapper(YAMLFactory()).registerKotlinModule().setSerializationInclusion(JsonInclude.Include.NON_ABSENT)
+val yamlMapper =
+    ObjectMapper(YAMLFactory()).registerKotlinModule().setSerializationInclusion(JsonInclude.Include.NON_ABSENT)
+
+val version by lazy {
+    Properties().apply { load(object {}::class.java.classLoader.getResourceAsStream("maven.properties")) }["version"]
+}
 
 fun fieldMissingOrNull(field: String, source: String): String = "'$field' field is missing or null in $source"
 
@@ -34,3 +40,7 @@ fun makeScriptExecutable(location: File) {
             .waitFor()
     }
 }
+
+fun writeDefaultConfigFile(resourcePath: String, targetFile: File) =
+    object {}::class.java.classLoader.getResourceAsStream(resourcePath)
+        ?.let { targetFile.writeBytes(it.readAllBytes()) }

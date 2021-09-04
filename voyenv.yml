@@ -50,7 +50,6 @@ instruments:
     asset: npm-miner-voyager.zip
 
 tokens:
-  - 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
 
 runtimes:
   java:

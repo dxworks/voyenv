@@ -8,6 +8,7 @@ import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 import org.dxworks.utils.java.rest.client.HttpClient
 import org.dxworks.voyenv.config.RuntimeConfig
+import org.dxworks.voyenv.runtimes.ExecutableSymlink
 import org.dxworks.voyenv.runtimes.RuntimeService
 import org.dxworks.voyenv.utils.decompressTo
 import org.dxworks.voyenv.utils.logger
@@ -25,7 +26,7 @@ class JavaRuntimeService(runtimesDir: File) : RuntimeService("java", runtimesDir
 
     private val httpClient = HttpClient()
 
-    override fun download(config: RuntimeConfig): Pair<String, String> {
+    override fun download(config: RuntimeConfig): List<ExecutableSymlink> {
         val semver = Semver(config.version, Semver.SemverType.LOOSE)
         val imageType = config.type.ifBlank { "jre" }
 
@@ -52,6 +53,7 @@ class JavaRuntimeService(runtimesDir: File) : RuntimeService("java", runtimesDir
 
 
         val jreBinary: AdoptBinariesResponse? = bestMatchedResponse.binaries?.find { it.imageType == imageType }
+            ?: bestMatchedResponse.binaries?.find { it.imageType == "jdk" }
         val binaryToDownload = jreBinary ?: bestMatchedResponse.binaries!![0]
 
 
@@ -65,7 +67,9 @@ class JavaRuntimeService(runtimesDir: File) : RuntimeService("java", runtimesDir
         getArchiveInputStream(res.content)
             .decompressTo(targetDir)
 
-        return "java-${semver.major}" to (getJavaBinary(targetDir)?.also { makeScriptExecutable(it) }?.let { it.absolutePath } ?: "")
+        return getJavaBinary(targetDir)
+            ?.also { makeScriptExecutable(it) }?.absolutePath
+            ?.let { listOf(ExecutableSymlink("java", it)) } ?: emptyList()
     }
 
     private fun getArchiveInputStream(responseInputStream: InputStream): ArchiveInputStream =

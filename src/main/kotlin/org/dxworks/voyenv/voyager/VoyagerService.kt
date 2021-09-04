@@ -5,13 +5,13 @@ import org.dxworks.githubminer.service.repository.releases.GithubReleasesService
 import org.dxworks.voyenv.utils.*
 import java.io.File
 
-class VoyagerService {
+class VoyagerService(val tokens: List<String>) {
 
     companion object {
         private val log = logger<VoyagerService>()
     }
 
-    private val githubReleasesService = GithubReleasesService(dxworks, voyager)
+    private val githubReleasesService = GithubReleasesService(dxworks, voyager, githubTokens = tokens)
 
     fun downloadVoyager(tag: String, location: File) {
         log.info("Downloading voyager@$tag")
@@ -28,7 +28,7 @@ class VoyagerService {
         voyagerDir.listFiles()?.forEach {
             it.copyRecursively(location.resolve(it.name), true)
         }
-        javaClass.getResourceAsStream("/default-mission.yml")?.let { location.resolve("mission.yml").writeBytes(it.readAllBytes()) }
+        writeDefaultConfigFile("/default-mission.yml", location.resolve("mission.yml"))
         voyagerDir.deleteRecursively()
     }
 
