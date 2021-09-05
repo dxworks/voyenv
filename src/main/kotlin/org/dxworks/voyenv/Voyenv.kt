@@ -31,7 +31,7 @@ fun main(args: Array<String>) {
 
 private fun getVoyenvFile(args: Array<String>) =
     if (args.size == 1) {
-        args[1]
+        args[0]
     } else {
         defaultReleaseFileName
     }
