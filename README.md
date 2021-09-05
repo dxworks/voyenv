@@ -11,7 +11,7 @@ Install Voyenv through the NPM package manager.
 We have created a wrapper around the voyenv jar (using [jdeploy](https://github.com/shannah/jdeploy)) to easily install and upgrade the tool.
 
 ```shell
-npm install @org.dxworks/voyenv -g
+npm install @dx-works/voyenv -g
 ```
 
 Verify the installation by running:
