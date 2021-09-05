@@ -15,7 +15,7 @@
     "shelljs": "^0.7.5"
   },
   "license": "Apache-2.0",
-  "name": "@org.dxworks/voyenv",
+  "name": "@dx-works/voyenv",
   "files": [
     "jdeploy-bundle"
   ],
