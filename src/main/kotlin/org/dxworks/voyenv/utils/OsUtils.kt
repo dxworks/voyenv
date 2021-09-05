@@ -1,4 +1,4 @@
-package org.dxworks.voyenv
+package org.dxworks.voyenv.utils
 
 private val osName by lazy { System.getProperty("os.name") }
 val isWindows by lazy { osName.contains("win", ignoreCase = true) }

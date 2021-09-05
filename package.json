@@ -1,15 +1,29 @@
 {
-  "bin": {"voyenv": "jdeploy-bundle/jdeploy.js"},
+  "bin": {
+    "voyenv": "jdeploy-bundle/jdeploy.js"
+  },
   "author": "dxworks",
   "description": "A CLI tool to configure Voyager releases and environments",
   "main": "index.js",
   "preferGlobal": true,
   "repository": "",
   "version": "1.0.0-SNAPSHOT",
-  "jdeploy": {"jar": "target/voyenv.jar"},
-  "dependencies": {"shelljs": "^0.7.5"},
+  "jdeploy": {
+    "jar": "target/voyenv.jar"
+  },
+  "dependencies": {
+    "shelljs": "^0.7.5"
+  },
   "license": "Apache-2.0",
   "name": "@org.dxworks/voyenv",
-  "files": ["jdeploy-bundle"],
-  "scripts": {"test": "echo \"Error: no test specified\" && exit 1"}
+  "files": [
+    "jdeploy-bundle"
+  ],
+  "scripts": {
+    "package": "jdeploy package",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "jdeploy": "^1.0.22"
+  }
 }

@@ -34,7 +34,7 @@ internal class PythonStandaloneAssetMetaInfoTest {
         assertEquals("3.9.5", metaInfo.version)
         assertEquals("aarch64", metaInfo.arch)
         assertEquals("apple", metaInfo.os)
-        assertEquals("mac", metaInfo.platform)
+        assertEquals("macos", metaInfo.platform)
         assertEquals("darwin", metaInfo.distribution)
         assertEquals("pgo+lto", metaInfo.optimization)
         assertEquals("20210506T0943", metaInfo.timestamp)

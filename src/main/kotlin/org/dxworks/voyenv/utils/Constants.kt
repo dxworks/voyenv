@@ -13,7 +13,7 @@ const val latest = "latest"
 object OS {
     const val WINDOWS = "windows"
     const val LINUX = "linux"
-    const val MAC = "mac"
+    const val MAC = "macos"
 }
 
 const val CLEAR_LINE = "\u001b[K"
