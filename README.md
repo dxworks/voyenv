@@ -53,7 +53,7 @@ The voyager release will also be created in the current working directory.
 Voyenv declares the voyager release in a `yml` file.
 A voyenv.yml example:
 
-```yml
+```yaml
 # Name of the release (a folder with this name will be created in the working directory)
 name: voyager-test-1
 # The Voyager version to download. See at https://github.com/dxworks/voyager/releases 
@@ -98,11 +98,11 @@ tokens:
 runtimes:
   java:
     version: 11
-    platform: macos
+    platform: mac
     arch: x64
   python:
     version: 3.9.4
-    platform: macos
+    platform: mac
     arch: x86_64
 
 ```
@@ -116,15 +116,16 @@ Currently, Voyenv only supports adding Java and Python runtime environments.
 The options you have to configure the two runtimes are:
 ```yaml
     # get java versions from https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/tag/jdk-11.0.11%2B9_openj9-0.26.0 or api from https://api.adoptopenjdk.net/q/swagger-ui/#/Assets/searchReleases
+    # getting java options by calling links like https://api.adoptopenjdk.net/v3/assets/feature_releases/11/ga?architecture=x64&jvm_impl=hotspot&os=macos
     java:
         version: 11.1
-        platform: windows | linux | macos
+        platform: windows | linux | mac
         arch: x86 | x64
 
-    # get python versions from https://github.com/actions/python-versions/blob/main/versions-manifest.json
+    # get python runtimes from https://github.com/indygreg/python-build-standalone/releases
     python:
         version: 3.9.1
-        platform: windows | linux | macos
+        platform: windows | linux | mac
         arch: x86 | x64 | ...
     
 ```

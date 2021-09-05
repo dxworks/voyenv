@@ -4,6 +4,8 @@ repo_url: https://github.com/dxworks/voyenv
 repo_name: dxworks/voyenv
 edit_uri: edit/docs/docs/
 
+copyright: Copyright &copy; 2021 Dxworks
+
 theme:
   name: material
   features:
@@ -19,19 +21,23 @@ theme:
   palette:
     # Toggle light mode
     - scheme: default
-      primary: indigo
-      accent: indigo
+      media: "(prefers-color-scheme: light)"
+      primary: teal
+      accent: teal
       toggle:
-        icon: material/weather-sunny
+        icon: material/toggle-switch-off-outline
         name: Switch to light mode
 
     # Toggle dark mode
     - scheme: slate
-      primary: indigo
-      accent: indigo
+      media: "(prefers-color-scheme: dark)"
+      primary: black
+      accent: black
       toggle:
-        icon: material/weather-night
+        icon: material/toggle-switch
         name: Switch to dark mode
+
+  logo: assets/icons/dxworks-white-square-thick.png
 
 plugins:
   - search:
@@ -44,6 +50,7 @@ markdown_extensions:
   - attr_list
   - admonition
   - pymdownx.details
+  - pymdownx.tabbed
   - pymdownx.superfences
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
@@ -54,12 +61,16 @@ extra_css:
 
 extra:
   generator: false
+  version:
+    provider: mike
 
 use_directory_urls: false
 
 nav:
-  - Getting Started: 'gettingStarted.md'
-  - Configuration: 'configuration.md'
-  - Instruments: 'instruments.md'
-  - Runtimes: 'runtimes.md'
-
+  - Home:
+      - 'index.md'
+      - Installing: 'installing.md'
+      - Configuration: 'configuration.md'
+      - Instruments: 'instruments.md'
+      - Runtimes: 'runtimes.md'
+  - Quick Start: 'quickstart.md'
