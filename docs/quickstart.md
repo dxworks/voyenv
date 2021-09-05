@@ -3,7 +3,7 @@
 To install `voyenv` run the following command using `npm`:
 
 ```shell
-npm install @dx-works/voyeny -g
+npm install @dx-works/voyenv -g
 ```
 
 To verify that the installation has completed successfully, run:
