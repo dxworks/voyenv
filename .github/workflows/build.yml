@@ -1,0 +1,37 @@
+name: Build
+
+on: [ "push", "pull_request" ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Java for publishing to GitHub Packages
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Maven Install
+        run: mvn clean package
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Jar
+        run: mvn package
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '12.x'
+
+      - name: Prepare Node App
+        run: |
+          npm install
+          npm run jdeploy-install
+
+      - name: Test installation
+        run: |
+          voyenv -version

@@ -1,0 +1,76 @@
+on:
+  push:
+    tags:
+      - 'v*'
+
+name: Create Release
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build
+        run: mvn package
+
+      - name: Extract Semver
+        id: semver_parser
+        run: |
+          semver=${TAG#"refs/tags/v"}
+          semver=${semver%"-voyager"}
+          echo ::set-output name=semver::$semver
+        env:
+          TAG: ${{ github.ref }}
+
+      - name: Prepare Assets
+        run: |
+          mkdir voyenv
+          mkdir voyenv/config
+          cp voyenv.yml voyenv/config/voyenv.yml
+          cp README.md voyenv/README.md
+          cp target/voyenv.jar voyenv/voyenv.jar
+      - name: Create Archive
+        run: zip -r voyenv.zip voyenv
+
+      - name: Prepare Release Notes
+        run: touch ${{ github.workspace }}/releaseNotes/v${{ steps.semver_parser.outputs.semver }}.md
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Voyenv ${{ steps.semver_parser.outputs.semver }}
+          body_path: ${{ github.workspace }}/releaseNotes/v${{ steps.semver_parser.outputs.semver }}.md
+          body: ""
+          prerelease: false
+          draft: false
+          fail_on_unmatched_files: true
+          files: voyenv.zip
+
+  deploy-to-npm:
+    name: Deploy to NPM Registry
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Jar
+        run: mvn package
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '12.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Prepare Node App
+        run: |
+          npm install
+          npm run package
+
+      - name: Publish NPM
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
