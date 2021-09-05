@@ -1,5 +1,6 @@
 package org.dxworks.voyenv.runtimes
 
+import org.dxworks.voyenv.ProgressWriter
 import org.dxworks.voyenv.config.RuntimeConfig
 import org.dxworks.voyenv.runtimes.java.JavaRuntimeService
 import org.dxworks.voyenv.runtimes.node.NodeRuntimeService
@@ -30,17 +31,32 @@ class RuntimesManager(private val releaseDir: File) {
     );
 
     fun downloadAndConfigureRuntimes(runtimes: Map<String, RuntimeConfig>) {
-        runtimes
-            .mapNotNull { (runtimeName, config) -> downloadRuntimeAndGetExecutable(runtimeName, config) }
-            .flatten()
+        println("Setting up runtimes:")
+
+        val availableRuntimes = runtimes.filter { getRuntimeService(it.key) != null }
+
+        val progressWriter = ProgressWriter(availableRuntimes.keys.toList())
+
+        availableRuntimes
+            .entries
+            .parallelStream()
+            .map { (runtimeName, config) -> getRuntimeService(runtimeName)!!.download(config, progressWriter) }
+            .flatMap { it.stream() }
             .forEach { createExecutableSymlink(it) }
+
 
         writeDefaultConfigFile("/default-config.yml", releaseDir.resolve(".config.yml"))
         writeDefaultConfigFile("/default-doctor.yml", releaseDir.resolve(".doctor.yml"))
+        println("Finished setting up runtimes")
     }
 
-    private fun downloadRuntimeAndGetExecutable(runtimeName: String, config: RuntimeConfig) =
-        runtimeServices.find { it.name == runtimeName }?.download(config)
+    private fun getRuntimeService(runtimeName: String): RuntimeService? {
+        val service = runtimeServices.find { it.name == runtimeName }
+        if (service == null) {
+            log.error("Unknown runtime configuration $runtimeName")
+        }
+        return service
+    }
 
     private fun createExecutableSymlink(it: ExecutableSymlink) {
         val link = executablePathsDir.resolve(it.executableLinkName).toPath()
@@ -49,6 +65,7 @@ class RuntimesManager(private val releaseDir: File) {
 
         Files.createSymbolicLink(link, Paths.get(it.executableAbsolutePath))
         makeScriptExecutable(link.toFile())
+        makeScriptExecutable(Paths.get(it.executableAbsolutePath).toFile())
     }
 
     companion object {

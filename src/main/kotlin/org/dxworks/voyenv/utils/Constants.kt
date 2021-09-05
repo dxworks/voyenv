@@ -15,3 +15,6 @@ object OS {
     const val LINUX = "linux"
     const val MAC = "mac"
 }
+
+const val CLEAR_LINE = "\u001b[K"
+const val CLEAR_SCREEN = "\u001b[2J"

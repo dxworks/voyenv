@@ -1,19 +1,19 @@
 package org.dxworks.voyenv.runtimes.java
 
-import com.google.api.client.http.GenericUrl
 import com.google.common.reflect.TypeToken
 import com.vdurmont.semver4j.Semver
 import org.apache.commons.compress.archivers.ArchiveInputStream
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 import org.dxworks.utils.java.rest.client.HttpClient
+import org.dxworks.voyenv.Progress
+import org.dxworks.voyenv.ProgressWriter
 import org.dxworks.voyenv.config.RuntimeConfig
 import org.dxworks.voyenv.runtimes.ExecutableSymlink
 import org.dxworks.voyenv.runtimes.RuntimeService
+import org.dxworks.voyenv.utils.FilesDownloader
 import org.dxworks.voyenv.utils.decompressTo
 import org.dxworks.voyenv.utils.logger
-import org.dxworks.voyenv.utils.makeScriptExecutable
-import java.io.BufferedInputStream
 import java.io.File
 import java.io.InputStream
 
@@ -21,12 +21,51 @@ import java.io.InputStream
 class JavaRuntimeService(runtimesDir: File) : RuntimeService("java", runtimesDir) {
 
     companion object {
-        private val logger = logger<JavaRuntimeService>()
+        private val log = logger<JavaRuntimeService>()
     }
 
     private val httpClient = HttpClient()
 
-    override fun download(config: RuntimeConfig): List<ExecutableSymlink> {
+    override fun download(config: RuntimeConfig, progressWriter: ProgressWriter?): List<ExecutableSymlink> {
+        progressWriter?.update(name, Progress("Searching for package"))
+        val downloadLink = getDownloadLink(config)
+
+        if (downloadLink == null) {
+            progressWriter?.update(name, Progress("Could not find download link for $name"))
+            log.error("Could not find download link for $name: $config")
+            return emptyList()
+        }
+
+        log.info("Downloading $name from $downloadLink")
+        progressWriter?.update(name, Progress("Downloading"))
+
+        val inputStream = FilesDownloader().downloadFile(downloadLink, progressWriter = progressWriter, progressWriterId = name)
+        return if (inputStream != null) {
+            log.info("$name Download Finished")
+            log.info("$name Unzipping")
+            progressWriter?.update(name, Progress("Unzipping...", total = -1))
+
+            val targetDir = runtimesDir.resolve(config.platform)
+            getArchiveInputStream(inputStream).decompressTo(targetDir)
+
+            log.info("$name Unzip Finished")
+            log.info("$name Extracting executables")
+            progressWriter?.update(name, Progress("Extracting executables...", total = -1))
+            val executableSymlinks = getJavaBinary(targetDir)?.absolutePath
+                ?.let { listOf(ExecutableSymlink("java", it)) } ?: emptyList()
+
+            log.info("$name Finished")
+            progressWriter?.update(name, Progress("Finished", total = -1))
+
+            executableSymlinks
+        } else {
+            progressWriter?.update(name, Progress("Failed", total = -1))
+            log.error("$name Download Failed")
+            emptyList()
+        }
+    }
+
+    private fun getDownloadLink(config: RuntimeConfig): String? {
         val semver = Semver(config.version, Semver.SemverType.LOOSE)
         val imageType = config.type.ifBlank { "jre" }
 
@@ -57,23 +96,11 @@ class JavaRuntimeService(runtimesDir: File) : RuntimeService("java", runtimesDir
         val binaryToDownload = jreBinary ?: bestMatchedResponse.binaries!![0]
 
 
-        val downloadLink = binaryToDownload.packageData!!.link
-
-        logger.info("Downloading Java form $downloadLink")
-        val res = httpClient.get(GenericUrl(downloadLink))
-
-        val targetDir = runtimesDir.resolve(config.platform)
-
-        getArchiveInputStream(res.content)
-            .decompressTo(targetDir)
-
-        return getJavaBinary(targetDir)
-            ?.also { makeScriptExecutable(it) }?.absolutePath
-            ?.let { listOf(ExecutableSymlink("java", it)) } ?: emptyList()
+        return binaryToDownload.packageData!!.link
     }
 
-    private fun getArchiveInputStream(responseInputStream: InputStream): ArchiveInputStream =
-        TarArchiveInputStream(GzipCompressorInputStream(BufferedInputStream(responseInputStream)))
+    private fun getArchiveInputStream(InputStream: InputStream): ArchiveInputStream =
+        TarArchiveInputStream(GzipCompressorInputStream(InputStream))
 
     private fun getJavaBinary(targetDir: File): File? {
         return targetDir.walkTopDown()

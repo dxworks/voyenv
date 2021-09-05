@@ -1,12 +1,19 @@
 <configuration>
     <timestamp key="byDay" datePattern="yyyyMMdd'T'HHmmss"/>
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+<!--    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">-->
+<!--        <encoder>-->
+<!--            <pattern>%-5level %msg%n</pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>voyenv.log</file>
+        <append>true</append>
         <encoder>
-            <pattern>%-5level %msg%n</pattern>
+            <pattern>%-4relative %-5level %logger{35} - %msg%n</pattern>
         </encoder>
     </appender>
     <root level="info">
-        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
     </root>
 </configuration>

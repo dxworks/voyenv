@@ -6,7 +6,7 @@
 
     <groupId>org.dxworks.voyager</groupId>
     <artifactId>voyenv</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.0-SNAPSHOT</version>
 
     <properties>
         <version>${project.version}</version>
@@ -96,7 +96,6 @@
             <artifactId>zstd-jni</artifactId>
             <version>1.5.0-2</version>
         </dependency>
-
     </dependencies>
 
     <licenses>
