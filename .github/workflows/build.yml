@@ -18,3 +18,20 @@ jobs:
         run: mvn clean package
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Jar
+        run: mvn package
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '12.x'
+
+      - name: Prepare Node App
+        run: |
+          npm install
+          npm run jdeploy-install
+
+      - name: Test installation
+        run: |
+          voyenv -version
