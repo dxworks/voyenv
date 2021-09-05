@@ -1,0 +1,65 @@
+site_name: Voyenv
+
+repo_url: https://github.com/dxworks/voyenv
+repo_name: dxworks/voyenv
+edit_uri: edit/docs/docs/
+
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.indexes
+    - search.suggest
+    - search.highlight
+
+  palette:
+    # Toggle light mode
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+    # Toggle dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+
+plugins:
+  - search:
+      prebuild_index: true
+
+markdown_extensions:
+  - toc:
+      permalink: true
+      toc_depth: 10
+  - attr_list
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+
+extra_css:
+  - stylesheets/styles.css
+
+extra:
+  generator: false
+
+use_directory_urls: false
+
+nav:
+  - Getting Started: 'gettingStarted.md'
+  - Configuration: 'configuration.md'
+  - Instruments: 'instruments.md'
+  - Runtimes: 'runtimes.md'
+
