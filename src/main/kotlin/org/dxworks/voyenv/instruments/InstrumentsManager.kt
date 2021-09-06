@@ -2,6 +2,7 @@ package org.dxworks.voyenv.instruments
 
 import com.vdurmont.semver4j.Semver
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream
+import org.dxworks.githubminer.constants.ANONYMOUS
 import org.dxworks.githubminer.constants.GITHUB_PATH
 import org.dxworks.githubminer.service.repository.releases.GithubReleasesService
 import org.dxworks.voyenv.Progress
@@ -43,13 +44,13 @@ class InstrumentsManager(location: File, val tokens: List<String>?) {
     private fun getTokens(instrumentEnvConfig: InstrumentEnvConfig): List<String>? =
         tokens?.let { list -> instrumentEnvConfig.token?.let { listOf(it) + list } ?: list }
 
-    fun getTag(
+    private fun getTag(
         instrumentEnvConfig: InstrumentEnvConfig,
         owner: String,
         repo: String
     ) = if (instrumentEnvConfig.tag == latest) {
-        val githubReleasesService = instrumentEnvConfig.token
-            ?.let { GithubReleasesService(owner, repo, githubTokens = listOf(it)) }
+        val githubReleasesService = getTokens(instrumentEnvConfig)
+            ?.let { GithubReleasesService(owner, repo, githubTokens = it) }
             ?: GithubReleasesService(owner, repo)
         val releases = githubReleasesService.getReleases()
         log.info("Found ${releases.size} releases for $owner/$repo: ${releases.mapNotNull { it.tagName }}")
@@ -80,12 +81,12 @@ class InstrumentsManager(location: File, val tokens: List<String>?) {
                 if (inputStream != null) {
                     log.info("${instrumentEnvConfig.name} Download Finished")
                     log.info("${instrumentEnvConfig.name} Unzipping")
-                    progressWriter.update(instrumentEnvConfig.name, Progress("Unzipping...", total = -1))
+                    progressWriter.update(instrumentEnvConfig.name, Progress("Unzipping..."))
                     ZipArchiveInputStream(inputStream).decompressTo(instrumentsDir)
                     log.info("${instrumentEnvConfig.name} Finished")
-                    progressWriter.update(instrumentEnvConfig.name, Progress("Finished", total = -1))
+                    progressWriter.update(instrumentEnvConfig.name, Progress("Finished", forceWrite = true))
                 } else {
-                    progressWriter.update(instrumentEnvConfig.name, Progress("Failed", total = -1))
+                    progressWriter.update(instrumentEnvConfig.name, Progress("Failed", forceWrite = true))
                     log.error("${instrumentEnvConfig.name} Download Failed")
                 }
             }

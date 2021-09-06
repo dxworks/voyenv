@@ -1,7 +1,6 @@
 package org.dxworks.voyenv
 
 import com.fasterxml.jackson.module.kotlin.readValue
-import org.dxworks.githubminer.constants.ANONYMOUS
 import org.dxworks.voyager.utils.versionCommandArgs
 import org.dxworks.voyenv.config.Voyenv
 import org.dxworks.voyenv.instruments.InstrumentsManager
@@ -24,7 +23,7 @@ fun main(args: Array<String>) {
 
     val releaseDir = Paths.get(voyenv.name).toFile().apply { mkdirs() }
 
-    VoyagerService(voyenv.tokens ?: listOf(ANONYMOUS)).downloadVoyager(voyenv.voyagerVersion, releaseDir)
+    VoyagerService().downloadVoyager(voyenv.voyagerVersion, releaseDir)
     InstrumentsManager(releaseDir, voyenv.tokens).downloadAndInstallInstruments(voyenv.instruments)
     RuntimesManager(releaseDir).downloadAndConfigureRuntimes(voyenv.runtimes)
 }

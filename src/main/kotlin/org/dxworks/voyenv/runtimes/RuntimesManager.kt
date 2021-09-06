@@ -45,8 +45,8 @@ class RuntimesManager(private val releaseDir: File) {
             .forEach { createExecutableSymlink(it) }
 
 
-        writeDefaultConfigFile("/default-config.yml", releaseDir.resolve(".config.yml"))
-        writeDefaultConfigFile("/default-doctor.yml", releaseDir.resolve(".doctor.yml"))
+        writeDefaultConfigFile("default-config.yml", releaseDir.resolve(".config.yml"))
+        writeDefaultConfigFile("default-doctor.yml", releaseDir.resolve(".doctor.yml"))
         println("Finished setting up runtimes")
     }
 

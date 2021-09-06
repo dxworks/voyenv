@@ -17,7 +17,7 @@ class ProgressWriter(tasks: List<String>) {
         id?.run {
             tasks[id] = progress
             val currentTimeInMillis = System.currentTimeMillis()
-            if (currentTimeInMillis - lastRun > 500) {
+            if (currentTimeInMillis - lastRun > 500 || progress.forceWrite) {
                 print()
                 lastRun = currentTimeInMillis
             }
@@ -51,7 +51,8 @@ class Progress(
     val message: String,
     val current: Long = 0,
     val total: Long = -1,
-    val extraMessage: String = ""
+    val extraMessage: String = "",
+    val forceWrite: Boolean = false
 ) {
     val percentage = "${((current.toDouble() / total.toDouble()) * 100).toInt()}%"
 }
