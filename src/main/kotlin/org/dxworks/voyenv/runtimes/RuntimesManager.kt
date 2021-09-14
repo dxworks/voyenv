@@ -1,5 +1,6 @@
 package org.dxworks.voyenv.runtimes
 
+import org.dxworks.voyenv.ProgressBarConfig
 import org.dxworks.voyenv.ProgressWriter
 import org.dxworks.voyenv.config.RuntimeConfig
 import org.dxworks.voyenv.runtimes.java.JavaRuntimeService
@@ -35,7 +36,7 @@ class RuntimesManager(private val releaseDir: File) {
 
         val availableRuntimes = runtimes.filter { getRuntimeService(it.key) != null }
 
-        val progressWriter = ProgressWriter(availableRuntimes.keys.toList())
+        val progressWriter = ProgressWriter(availableRuntimes.keys.toList(), ProgressBarConfig())
 
         availableRuntimes
             .entries
@@ -45,8 +46,8 @@ class RuntimesManager(private val releaseDir: File) {
             .forEach { createExecutableSymlink(it) }
 
 
-        writeDefaultConfigFile("/default-config.yml", releaseDir.resolve(".config.yml"))
-        writeDefaultConfigFile("/default-doctor.yml", releaseDir.resolve(".doctor.yml"))
+        writeDefaultConfigFile("default-config.yml", releaseDir.resolve(".config.yml"))
+        writeDefaultConfigFile("default-doctor.yml", releaseDir.resolve(".doctor.yml"))
         println("Finished setting up runtimes")
     }
 

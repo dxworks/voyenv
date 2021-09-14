@@ -116,7 +116,7 @@ Currently, Voyenv only supports adding Java and Python runtime environments.
 The options you have to configure the two runtimes are:
 ```yaml
     # get java versions from https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/tag/jdk-11.0.11%2B9_openj9-0.26.0 or api from https://api.adoptopenjdk.net/q/swagger-ui/#/Assets/searchReleases
-    # getting java options by calling links like https://api.adoptopenjdk.net/v3/assets/feature_releases/11/ga?architecture=x64&jvm_impl=hotspot&os=macos
+    # getting java options by calling links like https://api.adoptopenjdk.net/v3/assets/feature_releases/11/ga?architecture=x64&jvm_impl=hotspot&os=mac
     java:
         version: 11.1
         platform: windows | linux | mac

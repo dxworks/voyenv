@@ -12,8 +12,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Build
-        run: mvn package
 
       - name: Extract Semver
         id: semver_parser
@@ -23,6 +21,15 @@ jobs:
           echo ::set-output name=semver::$semver
         env:
           TAG: ${{ github.ref }}
+
+      - name: Fill Version
+        run: |
+          tag=${{ steps.semver_parser.outputs.semver }}
+          sed -i "s/\$tag_version/$tag/" pom.xml
+          sed -i "s/\$tag_version/$tag/" package.json
+
+      - name: Build
+        run: mvn package
 
       - name: Prepare Assets
         run: |
@@ -55,6 +62,21 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Extract Semver
+        id: semver_parser
+        run: |
+          semver=${TAG#"refs/tags/v"}
+          semver=${semver%"-voyager"}
+          echo ::set-output name=semver::$semver
+        env:
+          TAG: ${{ github.ref }}
+
+      - name: Fill Version
+        run: |
+          tag=${{ steps.semver_parser.outputs.semver }}
+          sed -i "s/\$tag_version/$tag/" pom.xml
+          sed -i "s/\$tag_version/$tag/" package.json
 
       - name: Build Jar
         run: mvn package

@@ -14,6 +14,12 @@ jobs:
         with:
           java-version: 11
 
+      - name: Fill Version
+        run: |
+          tag=0.0.0-test
+          sed -i "s/\$tag_version/$tag/" pom.xml
+          sed -i "s/\$tag_version/$tag/" package.json
+
       - name: Maven Install
         run: mvn clean package
         env:

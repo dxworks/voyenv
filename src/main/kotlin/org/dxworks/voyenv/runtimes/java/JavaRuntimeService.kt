@@ -4,6 +4,7 @@ import com.google.common.reflect.TypeToken
 import com.vdurmont.semver4j.Semver
 import org.apache.commons.compress.archivers.ArchiveInputStream
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
+import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 import org.dxworks.utils.java.rest.client.HttpClient
 import org.dxworks.voyenv.Progress
@@ -12,6 +13,7 @@ import org.dxworks.voyenv.config.RuntimeConfig
 import org.dxworks.voyenv.runtimes.ExecutableSymlink
 import org.dxworks.voyenv.runtimes.RuntimeService
 import org.dxworks.voyenv.utils.FilesDownloader
+import org.dxworks.voyenv.utils.OS.WINDOWS
 import org.dxworks.voyenv.utils.decompressTo
 import org.dxworks.voyenv.utils.logger
 import java.io.File
@@ -39,14 +41,15 @@ class JavaRuntimeService(runtimesDir: File) : RuntimeService("java", runtimesDir
         log.info("Downloading $name from $downloadLink")
         progressWriter?.update(name, Progress("Downloading"))
 
-        val inputStream = FilesDownloader().downloadFile(downloadLink, progressWriter = progressWriter, progressWriterId = name)
+        val inputStream =
+            FilesDownloader().downloadFile(downloadLink, progressWriter = progressWriter, progressWriterId = name)
         return if (inputStream != null) {
             log.info("$name Download Finished")
             log.info("$name Unzipping")
             progressWriter?.update(name, Progress("Unzipping...", total = -1))
 
             val targetDir = runtimesDir.resolve(config.platform)
-            getArchiveInputStream(inputStream).decompressTo(targetDir)
+            getArchiveInputStream(config, inputStream).decompressTo(targetDir)
 
             log.info("$name Unzip Finished")
             log.info("$name Extracting executables")
@@ -99,12 +102,15 @@ class JavaRuntimeService(runtimesDir: File) : RuntimeService("java", runtimesDir
         return binaryToDownload.packageData!!.link
     }
 
-    private fun getArchiveInputStream(InputStream: InputStream): ArchiveInputStream =
-        TarArchiveInputStream(GzipCompressorInputStream(InputStream))
+    private fun getArchiveInputStream(config: RuntimeConfig, inputStream: InputStream): ArchiveInputStream =
+        when (config.platform) {
+            WINDOWS -> ZipArchiveInputStream(inputStream)
+            else -> TarArchiveInputStream(GzipCompressorInputStream(inputStream))
+        }
 
     private fun getJavaBinary(targetDir: File): File? {
         return targetDir.walkTopDown()
-            .filter { it.name == "java" }
+            .filter { it.name == "java" || it.name == "java.exe" }
             .firstOrNull()
     }
 }

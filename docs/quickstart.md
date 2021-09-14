@@ -23,11 +23,10 @@ Depending on your operating system, add the following contents in the `voyenv.ym
     ```yaml
     name: voyager-test-1
     
-    voyager_version: v1.4.1
+    voyager_version: v1.5.0
     
     instruments:
         - name: dxworks/voyager-git-log-instrument
-          tag: v1.0.0
           asset: git-log.zip
         - name: dxworks/inspector-git
           asset: iglog.zip
@@ -64,11 +63,10 @@ Depending on your operating system, add the following contents in the `voyenv.ym
     ```yaml
     name: voyager-test-1
     
-    voyager_version: v1.4.1
+    voyager_version: v1.5.0
     
     instruments:
         - name: dxworks/voyager-git-log-instrument
-          tag: v1.0.0
           asset: git-log.zip
         - name: dxworks/inspector-git
           asset: iglog.zip
@@ -105,11 +103,10 @@ Depending on your operating system, add the following contents in the `voyenv.ym
     ```yaml
     name: voyager-test-1
     
-    voyager_version: v1.4.1
+    voyager_version: v1.5.0
     
     instruments:
         - name: dxworks/voyager-git-log-instrument
-          tag: v1.0.0
           asset: git-log.zip
         - name: dxworks/inspector-git
           asset: iglog.zip
@@ -152,8 +149,15 @@ This should download and configure a Voyager instance with all the official Voya
 ## Check
 To check `Voyager` was installed successfully, run the following commands:
 
-```shell
-cd voyager-test-1
-./voyager.sh -version
-./voyager.sh doctor
-```
+=== "Mac/Linux"
+    ```shell
+    cd voyager-test-1
+    ./voyager.sh --version
+    ./voyager.sh doctor
+    ```
+=== "Windows"
+    ```shell
+    cd voyager-test-1
+    voyager.bat --version
+    voyager.bat doctor
+    ```

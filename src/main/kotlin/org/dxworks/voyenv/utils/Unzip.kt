@@ -14,7 +14,7 @@ class Unzip {
         val logger = logger<Unzip>()
     }
 
-    fun decompress(archiveInputStream: ArchiveInputStream, targetDir: File) {
+    fun decompress(archiveInputStream: ArchiveInputStream, targetDir: File, rootDirName: String? = null) {
         archiveInputStream.use { inputStream ->
             var entry: ArchiveEntry? = inputStream.nextEntry
 
@@ -24,7 +24,7 @@ class Unzip {
                     // log something?
                     continue;
                 }
-                val name = fileName(targetDir, entry)
+                val name = fileName(targetDir, entry, rootDirName)
                 val f = File(name)
                 if (entry.isDirectory) {
                     if (!f.isDirectory && !f.mkdirs()) {
@@ -46,8 +46,9 @@ class Unzip {
         }
     }
 
-    private fun fileName(targetDir: File, entry: ArchiveEntry): String {
-        val destFile = File(targetDir, entry.name)
+    private fun fileName(targetDir: File, entry: ArchiveEntry, rootDirName: String?): String {
+        val destFile = File(targetDir,
+            entry.name.let { if (rootDirName != null) it.replaceBefore("/", rootDirName) else it })
         val destDirPath = targetDir.canonicalPath
         val destFilePath = destFile.canonicalPath
         if (!destFilePath.startsWith(destDirPath + File.separator)) {

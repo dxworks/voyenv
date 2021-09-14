@@ -7,7 +7,7 @@
   "main": "index.js",
   "preferGlobal": true,
   "repository": "",
-  "version": "0.1.0",
+  "version": "$tag_version",
   "jdeploy": {
     "jar": "target/voyenv.jar"
   },

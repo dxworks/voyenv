@@ -4,7 +4,6 @@ This is a list of official Voyager instruments that the dxworks team recognizes.
 ### [Git Log](https://github.com/dxworks/voyager-git-log-instrument)
 ```yaml
   - name: dxworks/voyager-git-log-instrument
-    tag: v1.0.0
     asset: git-log.zip
 ```
 ### [Iglog](https://github.com/dxworks/inspector-git)
