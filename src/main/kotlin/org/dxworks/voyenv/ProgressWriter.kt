@@ -4,11 +4,17 @@ import org.dxworks.voyenv.utils.CLEAR_LINE
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
-class ProgressWriter(tasks: List<String>) {
+class ProgressWriter(
+    tasks: List<String>,
+    private val progressBarConfig: ProgressBarConfig? = null,
+    val refreshTimeMs: Long = 500
+) {
 
     var printFirstTime = true
 
     val tasks: ConcurrentMap<String, Progress> = tasks.map { it to Progress("Pending") }.toMap(ConcurrentHashMap())
+
+    val maxTaskLength = tasks.map { it.length }.maxByOrNull { it }?.toInt() ?: 0
 
     var lastRun = 0L
 
@@ -17,7 +23,7 @@ class ProgressWriter(tasks: List<String>) {
         id?.run {
             tasks[id] = progress
             val currentTimeInMillis = System.currentTimeMillis()
-            if (currentTimeInMillis - lastRun > 500 || progress.forceWrite) {
+            if (currentTimeInMillis - lastRun > refreshTimeMs || progress.forceWrite) {
                 print()
                 lastRun = currentTimeInMillis
             }
@@ -29,12 +35,7 @@ class ProgressWriter(tasks: List<String>) {
         val toWrite = tasks.keys
             .sorted().joinToString("") { key ->
                 tasks[key]
-                    ?.let {
-                        if (it.total > 0)
-                            "$CLEAR_LINE$key: ${it.message} ${it.percentage} (${it.current}/${it.total}) ${it.extraMessage}\n"
-                        else
-                            "$CLEAR_LINE$key: ${it.message} ${it.extraMessage}\n"
-                    }
+                    ?.let { "$CLEAR_LINE${printTaskName(key)}: ${it.message} ${computeProgress(it)}${it.extraMessage}\n" }
                     ?: "\n"
             }
 
@@ -44,6 +45,26 @@ class ProgressWriter(tasks: List<String>) {
             printFirstTime = !printFirstTime
         }
         System.err.print(toWrite)
+    }
+
+    private fun printTaskName(key: String) = key.padEnd(maxTaskLength)
+
+    private fun computeProgress(it: Progress): String {
+        return when {
+            (it.total < 0) -> ""
+            progressBarConfig == null -> "${it.percentage} (${it.current}/${it.total})"
+            else -> "${createProgressBar(it)} ${it.percentage} (${it.current}/${it.total})"
+        }
+    }
+
+    private fun createProgressBar(it: Progress): String {
+        val pbConfig = progressBarConfig!!
+        var returnString = pbConfig.prefix
+        val numberOfCharacters: Int = (it.current.toDouble() / it.total * progressBarConfig.width).toInt()
+        returnString += progressBarConfig.character.repeat(numberOfCharacters)
+        returnString += " ".repeat(pbConfig.width - numberOfCharacters)
+        returnString += progressBarConfig.suffix
+        return returnString
     }
 }
 
@@ -56,3 +77,10 @@ class Progress(
 ) {
     val percentage = "${((current.toDouble() / total.toDouble()) * 100).toInt()}%"
 }
+
+class ProgressBarConfig(
+    val character: String = "#",
+    val prefix: String = "[",
+    val suffix: String = "]",
+    val width: Int = 50
+)

@@ -4,6 +4,7 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream
 import org.dxworks.githubminer.constants.GITHUB_PATH
 import org.dxworks.githubminer.service.repository.releases.GithubReleasesService
 import org.dxworks.voyenv.Progress
+import org.dxworks.voyenv.ProgressBarConfig
 import org.dxworks.voyenv.ProgressWriter
 import org.dxworks.voyenv.utils.*
 import java.io.File
@@ -19,7 +20,7 @@ class VoyagerService {
         println("Getting Voyager...")
         val voyagerDownloadUrl = "$GITHUB_PATH/$dxworks/$voyager/releases/download/${tag}/$voyagerAssetName"
 
-        val progressWriter = ProgressWriter(listOf(voyager))
+        val progressWriter = ProgressWriter(listOf(voyager), ProgressBarConfig())
         val inputStream = FilesDownloader().downloadFile(
             voyagerDownloadUrl,
             progressWriter = progressWriter,
@@ -27,7 +28,7 @@ class VoyagerService {
         )
 
         progressWriter.update(voyager, Progress("Finished", forceWrite = true))
-        ZipArchiveInputStream(inputStream).decompressTo(location)
+        ZipArchiveInputStream(inputStream).decompressTo(location,)
         unpackVoyagerDir(location)
         makeScriptExecutable(location.resolve("voyager.sh"))
         log.info("Done setting up voyager@$tag")

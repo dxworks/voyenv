@@ -6,7 +6,7 @@ Use the tool for packing [Voyager](https://github.com/dxworks/voyager) releases 
 Visit us on [Github](https://github.com/dxworks/voyenv)!
 
 ## Documentation
-Please follow the pages on this site form more information on how to install and use `voyenv`.
+Please follow the pages on this site for more information on how to install and use `voyenv`.
 
 ## Quick Start
 If you want to dive right in, visit our [Quickstart Guide](quickstart.md).

@@ -50,7 +50,7 @@ class PythonRuntimeService(runtimesDir: File) : RuntimeService("python", runtime
             progressWriter?.update(name, Progress("Unzipping..."))
 
             val targetDir = runtimesDir.resolve(config.platform)
-            TarArchiveInputStream(ZstdInputStream(inputStream)).decompressTo(targetDir)
+            TarArchiveInputStream(ZstdInputStream(inputStream)).decompressTo(targetDir,)
 
             log.info("$name Unzip Finished")
             log.info("$name Extracting executables")

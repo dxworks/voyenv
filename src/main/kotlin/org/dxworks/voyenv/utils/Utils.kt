@@ -26,8 +26,8 @@ fun ownerAndRepo(name: String): Pair<String, String> {
 }
 
 
-fun ArchiveInputStream.decompressTo(location: File) {
-    Unzip().decompress(this, location)
+fun ArchiveInputStream.decompressTo(location: File, rootDirName: String? = null) {
+    Unzip().decompress(this, location, rootDirName)
 }
 
 fun makeScriptExecutable(location: File) {
