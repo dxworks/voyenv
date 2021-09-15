@@ -11,132 +11,146 @@ To verify that the installation has completed successfully, run:
 voyenv -v
 ```
 
+To see how you can use the Voyenv CLI run:
+```shell
+voyenv -h
+```
+
 ## Configure
 
-Create a new folder where you want `voyenv` to download your voyager release. In that folder create a file
-called `voyenv.yml`
+=== "CLI"
+    Open a terminal window in a folder of your choosing and initialize a new `voyenv` project:
 
-Depending on your operating system, add the following contents in the `voyenv.yml` file:
-
-=== "Windows"
-
-    ```yaml
-    name: voyager-test-1
-    
-    voyager_version: v1.5.0
-    
-    instruments:
-        - name: dxworks/voyager-git-log-instrument
-          asset: git-log.zip
-        - name: dxworks/inspector-git
-          asset: iglog.zip
-        - name: dxworks/insider
-          asset: insider-voyager.zip
-        - name: dxworks/dude
-          asset: dude-voyager.zip
-        - name: dxworks/lizard
-        - name: dxworks/metrixplusplus
-        - name: dxworks/honeydew
-          asset: honeydew.zip
-        - name: dxworks/jafax
-          asset: jafax.zip
-        - name: dxworks/maven-miner
-          asset: maven-miner-voyager.zip
-        - name: dxworks/npm-miner
-          asset: npm-miner-voyager.zip
-    
-    tokens:
-    
-    runtimes:
-        java:
-            version: 11
-            platform: windows
-            arch: x64
-        python:
-            version: 3.9.4
-            platform: windows
-            arch: x86_64
+    ```shell
+    voyenv new -cir voyenv-tutorial
+    cd voyenv-tutorial
     ```
 
-=== "Mac Os"
-
-    ```yaml
-    name: voyager-test-1
+=== "Manual"
+    Create a new folder where you want `voyenv` to download your voyager release. In that folder create a file
+    called `voyenv.yml`
     
-    voyager_version: v1.5.0
+    Depending on your operating system, add the following contents in the `voyenv.yml` file:
     
-    instruments:
-        - name: dxworks/voyager-git-log-instrument
-          asset: git-log.zip
-        - name: dxworks/inspector-git
-          asset: iglog.zip
-        - name: dxworks/insider
-          asset: insider-voyager.zip
-        - name: dxworks/dude
-          asset: dude-voyager.zip
-        - name: dxworks/lizard
-        - name: dxworks/metrixplusplus
-        - name: dxworks/honeydew
-          asset: honeydew.zip
-        - name: dxworks/jafax
-          asset: jafax.zip
-        - name: dxworks/maven-miner
-          asset: maven-miner-voyager.zip
-        - name: dxworks/npm-miner
-          asset: npm-miner-voyager.zip
+    === "Windows"
     
-    tokens:
+        ```yaml
+        name: voyager-test-1
+        
+        voyager_version: v1.5.0
+        
+        instruments:
+            - name: dxworks/voyager-git-log-instrument
+              asset: git-log.zip
+            - name: dxworks/inspector-git
+              asset: iglog.zip
+            - name: dxworks/insider
+              asset: insider-voyager.zip
+            - name: dxworks/dude
+              asset: dude-voyager.zip
+            - name: dxworks/lizard
+            - name: dxworks/metrixplusplus
+            - name: dxworks/honeydew
+              asset: honeydew.zip
+            - name: dxworks/jafax
+              asset: jafax.zip
+            - name: dxworks/maven-miner
+              asset: maven-miner-voyager.zip
+            - name: dxworks/npm-miner
+              asset: npm-miner-voyager.zip
+        
+        tokens:
+        
+        runtimes:
+            java:
+                version: 11
+                platform: windows
+                arch: x64
+            python:
+                version: 3.9.4
+                platform: windows
+                arch: x86_64
+        ```
     
-    runtimes:
-        java:
-            version: 11
-            platform: mac
-            arch: x64
-        python:
-            version: 3.9.4
-            platform: mac
-            arch: x86_64
-    ```
-
-=== "Linux"
-
-    ```yaml
-    name: voyager-test-1
+    === "Mac Os"
     
-    voyager_version: v1.5.0
+        ```yaml
+        name: voyager-test-1
+        
+        voyager_version: v1.5.0
+        
+        instruments:
+            - name: dxworks/voyager-git-log-instrument
+              asset: git-log.zip
+            - name: dxworks/inspector-git
+              asset: iglog.zip
+            - name: dxworks/insider
+              asset: insider-voyager.zip
+            - name: dxworks/dude
+              asset: dude-voyager.zip
+            - name: dxworks/lizard
+            - name: dxworks/metrixplusplus
+            - name: dxworks/honeydew
+              asset: honeydew.zip
+            - name: dxworks/jafax
+              asset: jafax.zip
+            - name: dxworks/maven-miner
+              asset: maven-miner-voyager.zip
+            - name: dxworks/npm-miner
+              asset: npm-miner-voyager.zip
+        
+        tokens:
+        
+        runtimes:
+            java:
+                version: 11
+                platform: mac
+                arch: x64
+            python:
+                version: 3.9.4
+                platform: mac
+                arch: x86_64
+        ```
     
-    instruments:
-        - name: dxworks/voyager-git-log-instrument
-          asset: git-log.zip
-        - name: dxworks/inspector-git
-          asset: iglog.zip
-        - name: dxworks/insider
-          asset: insider-voyager.zip
-        - name: dxworks/dude
-          asset: dude-voyager.zip
-        - name: dxworks/lizard
-        - name: dxworks/metrixplusplus
-        - name: dxworks/honeydew
-          asset: honeydew.zip
-        - name: dxworks/jafax
-          asset: jafax.zip
-        - name: dxworks/maven-miner
-          asset: maven-miner-voyager.zip
-        - name: dxworks/npm-miner
-          asset: npm-miner-voyager.zip
+    === "Linux"
     
-    tokens:
-
-    runtimes:
-        java:
-            version: 11
-            platform: linux
-            arch: x64
-        python:
-            version: 3.9.4
-            platform: linux
-            arch: x86_64
-    ```
+        ```yaml
+        name: voyager-test-1
+        
+        voyager_version: v1.5.0
+        
+        instruments:
+            - name: dxworks/voyager-git-log-instrument
+              asset: git-log.zip
+            - name: dxworks/inspector-git
+              asset: iglog.zip
+            - name: dxworks/insider
+              asset: insider-voyager.zip
+            - name: dxworks/dude
+              asset: dude-voyager.zip
+            - name: dxworks/lizard
+            - name: dxworks/metrixplusplus
+            - name: dxworks/honeydew
+              asset: honeydew.zip
+            - name: dxworks/jafax
+              asset: jafax.zip
+            - name: dxworks/maven-miner
+              asset: maven-miner-voyager.zip
+            - name: dxworks/npm-miner
+              asset: npm-miner-voyager.zip
+        
+        tokens:
+    
+        runtimes:
+            java:
+                version: 11
+                platform: linux
+                arch: x64
+            python:
+                version: 3.9.4
+                platform: linux
+                arch: x86_64
+        ```
 
 ## Run
 Open a terminal window in the parent folder of the previously created `voyenv.yml` file and run the following command:

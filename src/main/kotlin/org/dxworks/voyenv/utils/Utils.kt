@@ -14,8 +14,8 @@ inline fun <reified T : Any> logger(): Logger = LoggerFactory.getLogger(T::class
 val yamlMapper =
     ObjectMapper(YAMLFactory()).registerKotlinModule().setSerializationInclusion(JsonInclude.Include.NON_ABSENT)
 
-val version by lazy {
-    Properties().apply { load(object {}::class.java.classLoader.getResourceAsStream("maven.properties")) }["version"]
+val version: String by lazy {
+    Properties().apply { load(object {}::class.java.classLoader.getResourceAsStream("maven.properties")) }["version"] as String
 }
 
 fun fieldMissingOrNull(field: String, source: String): String = "'$field' field is missing or null in $source"
@@ -41,3 +41,21 @@ fun makeScriptExecutable(location: File) {
 fun writeDefaultConfigFile(resourcePath: String, targetFile: File) =
     object {}::class.java.classLoader.getResourceAsStream(resourcePath)
         ?.let { targetFile.writeBytes(it.readAllBytes()) }
+
+fun writeTemplateFile(resourcePath: String, targetFile: File, replacements: Map<String, String>) =
+    object {}::class.java.classLoader.getResourceAsStream(resourcePath)
+        ?.let { inputStream ->
+            val filledText =
+                inputStream.bufferedReader().readLines()
+                    .joinToString(separator = "\n") { replaceTemplate(it, replacements) }
+            targetFile.writeText(filledText)
+
+        }?: println("Warning: Could not copy template file $resourcePath")
+
+fun replaceTemplate(template: String, replacements: Map<String, String>): String {
+    var newString = template
+    replacements.forEach {
+        newString = newString.replace("\${${it.key}}", it.value)
+    }
+    return newString
+}
