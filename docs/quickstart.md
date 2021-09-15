@@ -22,7 +22,7 @@ voyenv -h
     Open a terminal window in a folder of your choosing and initialize a new `voyenv` project:
 
     ```shell
-    voyenv new -cir voyenv-tutorial
+    voyenv init -cir voyenv-tutorial
     cd voyenv-tutorial
     ```
 
@@ -155,7 +155,7 @@ voyenv -h
 ## Run
 Open a terminal window in the parent folder of the previously created `voyenv.yml` file and run the following command:
 ```shell
-voyenv
+voyenv install
 ```
 
 This should download and configure a Voyager instance with all the official Voyager instruments and with their required runtime dependencies.
