@@ -16,10 +16,7 @@ class Voyenv(
         private const val source = "voyager release"
     }
 
-    val name = name ?: kotlin.run {
-        log.error(fieldMissingOrNull("name", source))
-        exitProcess(1)
-    }
+    val name = name ?: "."
 
     val voyagerVersion = voyager_version!!
 

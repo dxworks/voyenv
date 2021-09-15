@@ -10,6 +10,7 @@ import org.dxworks.voyenv.utils.logger
 import org.dxworks.voyenv.utils.makeScriptExecutable
 import org.dxworks.voyenv.utils.writeDefaultConfigFile
 import java.io.File
+import java.lang.Exception
 import java.nio.file.Files
 import java.nio.file.Paths
 
@@ -29,7 +30,7 @@ class RuntimesManager(private val releaseDir: File) {
         JavaRuntimeService(runtimesDir),
         PythonRuntimeService(runtimesDir),
         NodeRuntimeService(runtimesDir),
-    );
+    )
 
     fun downloadAndConfigureRuntimes(runtimes: Map<String, RuntimeConfig>) {
         println("Setting up runtimes:")
@@ -64,9 +65,13 @@ class RuntimesManager(private val releaseDir: File) {
         if (Files.exists(link))
             Files.delete(link)
 
-        Files.createSymbolicLink(link, Paths.get(it.executableAbsolutePath))
-        makeScriptExecutable(link.toFile())
-        makeScriptExecutable(Paths.get(it.executableAbsolutePath).toFile())
+        try {
+            Files.createSymbolicLink(link, Paths.get(it.executableAbsolutePath))
+            makeScriptExecutable(link.toFile())
+            makeScriptExecutable(Paths.get(it.executableAbsolutePath).toFile())
+        } catch (e: Exception) {
+            log.error("Could not create symbolic link ${it.executableLinkName} for ${it.executableAbsolutePath}!", e)
+        }
     }
 
     companion object {

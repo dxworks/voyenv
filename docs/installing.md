@@ -20,7 +20,7 @@ Before running the command you have to create a `yml` file described in the [Con
 
 Run the following command in a terminal window:
 ```yaml
-voyenv [path/to/voyenv/file]
+voyenv install [path/to/voyenv/file]
 ```
 
 The path to the voyenv.yml file is optional. If none is specified voyenv will search for a file named `voyenv.yml` in the current working directory.
@@ -33,13 +33,13 @@ Download the latest release from [Github](https://github.com/dxworks/voyenv/rele
 Run the following command to verify the installation:
 
 ```shell
-java -jar voyenv.jar -version
+java -jar voyenv.jar --version
 ```
 
 ### Usage
 From the voyenv installation folder run:
 ```shell
-java -jar  voyenv.jar [path/to/voyenv/file.yml]
+java -jar voyenv.jar install [path/to/voyenv/file.yml]
 ```
 The path to the voyenv.yml file is optional. If none is specified voyenv will search for a file named `voyenv.yml` in the current working directory.
 The voyager release will also be created in the current working directory.

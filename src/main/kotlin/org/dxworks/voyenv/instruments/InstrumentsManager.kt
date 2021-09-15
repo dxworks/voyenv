@@ -84,7 +84,7 @@ class InstrumentsManager(location: File, val tokens: List<String>?) {
                     log.info("${instrumentEnvConfig.name} Download Finished")
                     log.info("${instrumentEnvConfig.name} Unzipping")
                     progressWriter.update(instrumentEnvConfig.name, Progress("Unzipping..."))
-                    ZipArchiveInputStream(inputStream).decompressTo(instrumentsDir,"${instrumentEnvConfig.name}-${tag}")
+                    ZipArchiveInputStream(inputStream).decompressTo(instrumentsDir,"${instrumentEnvConfig.name.replace("/", ".").replace("\\", ".")}-${tag}")
                     log.info("${instrumentEnvConfig.name} Finished")
                     progressWriter.update(instrumentEnvConfig.name, Progress("Finished", forceWrite = true))
                 } else {
