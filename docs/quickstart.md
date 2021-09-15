@@ -35,7 +35,7 @@ voyenv -h
     === "Windows"
     
         ```yaml
-        name: voyager-test-1
+        name: voyager
         
         voyager_version: v1.5.0
         
@@ -75,7 +75,7 @@ voyenv -h
     === "Mac Os"
     
         ```yaml
-        name: voyager-test-1
+        name: voyager
         
         voyager_version: v1.5.0
         
@@ -115,7 +115,7 @@ voyenv -h
     === "Linux"
     
         ```yaml
-        name: voyager-test-1
+        name: voyager
         
         voyager_version: v1.5.0
         
@@ -165,13 +165,13 @@ To check `Voyager` was installed successfully, run the following commands:
 
 === "Mac/Linux"
     ```shell
-    cd voyager-test-1
+    cd voyager
     ./voyager.sh --version
     ./voyager.sh doctor
     ```
 === "Windows"
     ```shell
-    cd voyager-test-1
+    cd voyager
     voyager.bat --version
     voyager.bat doctor
     ```
