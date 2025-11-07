@@ -12,7 +12,6 @@ instruments:
   - name: dxworks/dude
     asset: dude-voyager.zip
   - name: dxworks/lizard
-  - name: dxworks/metrixplusplus
   - name: dxworks/honeydew
     asset: honeydew.zip
   - name: dxworks/jafax
@@ -21,6 +20,8 @@ instruments:
     asset: maven-miner-voyager.zip
   - name: dxworks/npm-miner
     asset: npm-miner-voyager.zip
+  - name: dxworks/codeframe
+    asset: codeframe-voyager.zip
 
 tokens:
 
